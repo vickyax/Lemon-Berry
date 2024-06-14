@@ -7,7 +7,7 @@
     "start": "node app.js",
     "client": "npm run dev --prefix client",
     "dev": "concurrently \"npm run start\" \"npm run client\"",
-    "build": "npm run build --prefix client",
+    "build": "npm install --prefix client && npm run build --prefix client",
     "deploy": "npm run build && npm run start"
   },
   "author": "vicky",
