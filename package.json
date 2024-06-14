@@ -4,7 +4,6 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "install": "npm install",
     "start": "node app.js",
     "client": "npm run dev --prefix client",
     "dev": "concurrently \"npm run start\" \"npm run client\"",
