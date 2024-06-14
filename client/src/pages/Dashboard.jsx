@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Preloader from "../components/Pre";
+import 'react-slideshow-image/dist/styles.css';
+import { Zoom } from 'react-slideshow-image';
 import Post from "../components/Post";
 import Profile from "../components/Profile";
 import Menu from "../components/Menu";
@@ -14,8 +16,58 @@ import { toast } from 'react-toastify';
 import "../styles/Dashboard.css";
 import "../styles/index.css";
 import "../style.css";
-
+import a from "../assets2/img1.jpg";
+import b from "../assets2/img2.gif";
+import c from "../assets2/img3.jpg";
+import d from "../assets2/img4.jpg";
+import ee from "../assets2/img5.jpg";
+import f from "../assets2/img6.webp";
+import backgroundMusic from "../assets/background.mp3";
 const Dashboard = () => {
+  useEffect(() => {
+    const audio = new Audio(backgroundMusic);
+    audio.loop = true;
+    audio.play(); // Auto play when component mounts
+  
+    const handleAudioLoad = () => {
+      setAudioLoaded(true);
+    };
+  
+    audio.addEventListener('canplaythrough', handleAudioLoad);
+  
+    return () => {
+      audio.removeEventListener('canplaythrough', handleAudioLoad);
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, ); // Empty dependency array ensures this effect runs only once
+
+  const ImageSlideshow = () => {
+    const images = [
+      a,b,c,d,ee,f
+    ];
+  
+    const zoomOutProperties = {
+      duration: 1000,
+      transitionDuration: 1000,
+      infinite: true,
+      indicators: true,
+      arrows: true,
+      autoplay: true,
+      autoplaySpeed: 300,
+    };
+  
+    return (
+      <div className="slide-container">
+        <Zoom {...zoomOutProperties}>
+          {images.map((each, index) => (
+            <img key={index} style={{ width: "100%" }} src={each} alt={`Slide ${index}`} />
+          ))}
+        </Zoom>
+      </div>
+    );
+  };
+  
   const [token, setToken] = useState(JSON.parse(localStorage.getItem("auth")) || "");
   const [load, updateLoad] = useState(true);
   const navigate = useNavigate();
@@ -41,6 +93,9 @@ const Dashboard = () => {
     <>
       <Preloader load={load} />
         <Navbar />
+        <div className="dash">
+        <ImageSlideshow />
+      </div>
       <div className="Dashboard" id={load ? "no-scroll" : "scroll"}>
         <ScrollToTop />
         <Routes>

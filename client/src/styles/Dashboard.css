@@ -66,4 +66,10 @@
     display: contents;
     color: #61dafb;
   }
- 
+  .dash{
+    width: 100%;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
+  padding: 10%;
+  }

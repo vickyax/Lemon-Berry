@@ -6,7 +6,7 @@ import styled, { keyframes } from 'styled-components';
 import { useDropzone } from 'react-dropzone';
 import useUserData from './getData';
 import Navbar from "./Navbar";
-
+import "./style2.css";
 const ProfileContainer = styled.div`
   padding: 2rem;
   background: #f9f9f9;
@@ -76,7 +76,7 @@ const FileUploadContainer = styled.div`
 
 const FileUploadLabel = styled.p`
   font-size: 1rem;
-  color: #777;
+  color: ##007bff;
   margin-bottom: 0.5rem;
 `;
 
@@ -294,7 +294,7 @@ const Post = () => {
                 />
               </Form.Group>
               <FileUploadContainer>
-                <FileUploadLabel>Upload Image</FileUploadLabel>
+                <FileUploadLabel class="upload">Upload Image</FileUploadLabel>
                 <div {...getRootProps()}>
                   <input {...getInputProps()} />
                   <FileUploadButton variant="secondary">Choose File</FileUploadButton>

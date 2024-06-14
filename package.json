@@ -4,7 +4,11 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "client": "npm run dev --prefix client",
+    "dev": "concurrently \"npm run start\" \"npm run client\"",
+    "build": "npm run build --prefix client",
+    "deploy": "npm run build && npm run start"
   },
   "author": "vicky",
   "license": "ISC",
@@ -21,6 +25,6 @@
     "react-google-login": "^5.2.2"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2"
+    "concurrently": "^8.2.2"
   }
 }

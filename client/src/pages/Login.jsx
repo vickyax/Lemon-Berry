@@ -70,7 +70,7 @@ const Login = () => {
       audio.pause();
       audio.currentTime = 0;
     };
-  }, []); // Empty dependency array ensures this effect runs only once
+  }, ); // Empty dependency array ensures this effect runs only once
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
