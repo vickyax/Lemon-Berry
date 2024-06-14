@@ -24,6 +24,7 @@ import ee from "../assets2/img5.jpg";
 import f from "../assets2/img6.webp";
 import backgroundMusic from "../assets/background.mp3";
 const Dashboard = () => {
+  const [audioLoaded, setAudioLoaded] = useState(false); // Track if audio has been loaded
   useEffect(() => {
     const audio = new Audio(backgroundMusic);
     audio.loop = true;
