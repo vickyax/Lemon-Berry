@@ -123,7 +123,7 @@ const Post = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/v1/messages', {
+        const response = await axios.get('https://lemonserver.onrender.com/api/v1/messages', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -155,7 +155,7 @@ const Post = () => {
     }
 
     try {
-      const result = await axios.post('http://localhost:3000/api/v1/messages', formData, {
+      const result = await axios.post('https://lemonserver.onrender.com/api/v1/messages', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
@@ -165,7 +165,7 @@ const Post = () => {
       setMessage('');
       setImage(null);
 
-      const updatedPosts = await axios.get('http://localhost:3000/api/v1/messages', {
+      const updatedPosts = await axios.get('https://lemonserver.onrender.com/api/v1/messages', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -179,7 +179,7 @@ const Post = () => {
 
   const handleDelete = async (postId) => {
     try {
-      await axios.delete(`http://localhost:3000/api/v1/messages/${postId}`, {
+      await axios.delete(`https://lemonserver.onrender.com/api/v1/messages/${postId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -200,7 +200,7 @@ const Post = () => {
 
     try {
       const result = await axios.put(
-        `http://localhost:3000/api/v1/messages/${editPostId}`,
+        `https://lemonserver.onrender.com/api/v1/messages/${editPostId}`,
         { message: editMessage },
         {
           headers: {
@@ -212,7 +212,7 @@ const Post = () => {
       setEditPostId(null);
       setEditMessage('');
 
-      const updatedPosts = await axios.get('http://localhost:3000/api/v1/messages', {
+      const updatedPosts = await axios.get('https://lemonserver.onrender.com/api/v1/messages', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -248,7 +248,7 @@ const Post = () => {
                 <PostContainer key={post._id}>
                   <PostTitle>{post.username}</PostTitle>
                   <PostContent>{post.message}</PostContent>
-                  {post.image && <img src={`http://localhost:3000/${post.image}`} alt="Post" style={{ maxWidth: '100%' }} />}
+                  {post.image && <img src={`https://lemonserver.onrender.com/${post.image}`} alt="Post" style={{ maxWidth: '100%' }} />}
                   {post.username === user.name && (
                     <>
                       <Button variant="warning" onClick={() => handleEdit(post)}>

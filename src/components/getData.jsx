@@ -8,7 +8,7 @@ const useUserData = (token) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/v1/userInfo', {
+        const response = await axios.get('https://lemonserver.onrender.com/api/v1/userInfo', {
           headers: {
             Authorization: `Bearer ${token}`, // Pass the token in the request headers
           },

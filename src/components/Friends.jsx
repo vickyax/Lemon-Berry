@@ -14,7 +14,7 @@ function Friends() {
 
   const fetchFriendsList = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/v1/users/friends/${user.id}`, {
+      const response = await axios.get(`https://lemonserver.onrender.com/api/v1/users/friends/${user.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -35,7 +35,7 @@ function Friends() {
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get(`http://localhost:3000/api/v1/users/search?query=${searchQuery}`);
+      const response = await axios.get(`https://lemonserver.onrender.com/api/v1/users/search?query=${searchQuery}`);
       setSearchResults(response.data.users);
     } catch (error) {
       console.error('Error searching users', error);
@@ -46,7 +46,7 @@ function Friends() {
   const handleAddFriend = async (friendId, friendName) => {
     try {
       const data={userId: user.id,friendId};
-      const response = await axios.post(`http://localhost:3000/api/v1/users/friends/add`, data, {
+      const response = await axios.post(`https://lemonserver.onrender.com/api/v1/users/friends/add`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -66,7 +66,7 @@ function Friends() {
 
   const handleRemoveFriend = async (friendId, friendName) => {
     try {
-      await axios.delete(`http://localhost:3000/api/v1/users/friends/${user.id}/${friendId}`, {
+      await axios.delete(`https://lemonserver.onrender.com/api/v1/users/friends/${user.id}/${friendId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

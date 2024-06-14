@@ -80,7 +80,7 @@ const Login = () => {
     if (email.length > 0 && password.length > 0) {
       const formData = { email, password };
       try {
-        const response = await axios.post("http://localhost:3000/api/v1/login", formData);
+        const response = await axios.post("https://lemonserver.onrender.com/api/v1/login", formData);
         localStorage.setItem('auth', JSON.stringify(response.data.token));
         toast.success("Login successful");
         navigate("/dashboard");
@@ -103,7 +103,7 @@ const Login = () => {
   const handleGoogleRegisterSuccess = async (credentialResponse) => {
     try {
       const token = credentialResponse.credential;
-      const response = await axios.post("http://localhost:3000/api/v1/gregister", { token });
+      const response = await axios.post("https://lemonserver.onrender.com/api/v1/gregister", { token });
       localStorage.setItem('auth', JSON.stringify(response.data.token));
       toast.success("Registration successful with Google");
       navigate("/dashboard");

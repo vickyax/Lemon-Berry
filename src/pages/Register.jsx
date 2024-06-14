@@ -21,7 +21,7 @@ const Register = () => {
       let token = credentialResponse.credential;
       
       // Send the token to your backend for registration
-      const response = await axios.post("http://localhost:3000/api/v1/gregister", {token} );
+      const response = await axios.post("https://lemonserver.onrender.com/api/v1/gregister", {token} );
       toast.success("Registration successful with Google");
       localStorage.setItem('auth', JSON.stringify(response.data.token));
       // Optionally, you can handle the registration response and redirect the user
@@ -54,7 +54,7 @@ const Register = () => {
           password
         };
         try{
-        const response = await axios.post("http://localhost:3000/api/v1/register", formData);
+        const response = await axios.post("https://lemonserver.onrender.com/api/v1/register", formData);
          toast.success("Registration successfull");
          navigate("/login");
        }catch(err){
