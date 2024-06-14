@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import useUserData from './getData';
+import Navbar from "./Navbar";
 const ProfileContainer = styled.div`
   padding: 2rem;
   background: #f9f9f9;
@@ -59,12 +60,15 @@ const Profile = () => {
   }
 
   return (
+    <>
+    <Navbar/>
     <ProfileContainer>
       <Title>Profile</Title>
       <Info><strong>Name:</strong> {user.name}</Info>
       <Info><strong>Email:</strong> {user.email}</Info>
       {/* Display other fields as needed */}
     </ProfileContainer>
+    </>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Preloader from "../components/Pre";
@@ -10,9 +10,9 @@ import Friends from "../components/Friends";
 import Home from "../components/Home";
 import Footer from "../components/Footer";
 import ScrollToTop from "../components/ScrollToTop";
+import { toast } from 'react-toastify';
 import "../styles/Dashboard.css";
 import "../styles/index.css";
-import { toast } from 'react-toastify';
 import "../style.css";
 
 const Dashboard = () => {
@@ -40,8 +40,8 @@ const Dashboard = () => {
   return (
     <>
       <Preloader load={load} />
-      <div className="Dashboard" id={load ? "no-scroll" : "scroll"}>
         <Navbar />
+      <div className="Dashboard" id={load ? "no-scroll" : "scroll"}>
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />

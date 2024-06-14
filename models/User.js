@@ -1,3 +1,4 @@
+//models/User.js
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
@@ -13,21 +14,30 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: false, // Make password optional
+    default: "", // Default empty string for password
+  },
+  friends: {
+    type: [mongoose.Schema.Types.ObjectId],
+    default: [], // Default empty array for friends
+    ref: "User", // Reference to User model (assuming friends are other users)
   },
 });
 
-// Add a method to hash passwords only if they are provided
+// Hash password before saving if provided or modified
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password") || !this.password) {
     return next();
   }
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (error) {
+    return next(error);
+  }
 });
 
-// Add a method to compare passwords only if they are provided
+// Method to compare password
 userSchema.methods.comparePassword = async function (candidatePassword) {
   if (!this.password) {
     return false;
@@ -37,4 +47,5 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
 };
 
 const User = mongoose.model("User", userSchema);
+
 module.exports = User;

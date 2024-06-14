@@ -1,5 +1,7 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
+const multer = require('../middleware/multer'); // Import multer middleware
+const authMiddleware = require('../middleware/auth');
 const {
   login,
   register,
@@ -10,19 +12,28 @@ const {
   messages,
   getAllMessages,
   updateMessage,
-  deleteMessage
-} = require("../controllers/user");
-const authMiddleware = require('../middleware/auth');
+  deleteMessage,
+  searchUsers,
+  addFriend,
+  fetchFriends
+} = require('../controllers/user');
 
-router.post("/login", login);
-router.post("/gregister", googleRegister);
-router.post("/register", register);
-router.get("/dashboard", authMiddleware, dashboard);
-router.get("/users", getAllUsers);
-router.get("/userInfo", authMiddleware, userInfo); // Route for fetching user info
-router.post("/messages", authMiddleware, messages); // Ensure only authenticated users can post messages
-router.get("/messages", getAllMessages);
-router.put("/messages/:id", authMiddleware, updateMessage); // Update a specific message by ID
-router.delete("/messages/:id", authMiddleware, deleteMessage); // Delete a specific message by ID
+// Public Routes
+router.post('/login', login);
+router.post('/gregister', googleRegister);
+router.post('/register', register);
+router.get('/users', getAllUsers);
+router.get('/users/search', searchUsers);
+
+// Authenticated Routes
+router.get('/dashboard', authMiddleware, dashboard);
+router.get('/userInfo', authMiddleware, userInfo);
+router.post('/messages', authMiddleware, multer.single('image'), messages);
+router.get('/messages', authMiddleware, getAllMessages);
+router.put('/messages/:id', authMiddleware, updateMessage);
+router.delete('/messages/:id', authMiddleware, deleteMessage);
+// router.post('/users/friends/add', authMiddleware, addFriend);
+router.post('/users/friends/add',addFriend);
+router.get('/users/friends/:userId', authMiddleware, fetchFriends);
 
 module.exports = router;

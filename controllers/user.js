@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Message = require("../models/messagePost");
+const upload = require('../middleware/multer');
 const { OAuth2Client } = require("google-auth-library");
 const ID = process.env.VITE_REACT_APP_googleauth;
 const client = new OAuth2Client(ID);
@@ -36,22 +37,35 @@ const login = async (req, res) => {
   }
 };
 
+// Controller function to handle message posting with optional file upload
 const messages = async (req, res) => {
-  const { id,username, message } = req.body;
+  const { id, username, message } = req.body;
 
-  if (!username || !message) {
-    return res.status(400).json({ msg: "Please provide both username and message" });
+  if (!username || (!message && !req.file)) {
+    return res.status(400).json({ msg: 'Please provide both username and message or upload a file' });
   }
 
   try {
-    const newMessage = new Message({ id,username, message });
+    let image = ''; // Initialize imagePath
+
+    if (req.file) {
+      // If file was uploaded, set imagePath to the path where multer saved the file
+      image = req.file.path;
+    }
+
+    // Create a new Message object
+    const newMessage = new Message({ id, username, message, image });
+
+    // Save the new message to the database
     await newMessage.save();
-    res.status(201).json({ msg: 'Message posted successfully!' });
+
+    // Return success response
+    res.status(201).json({ msg: 'Message posted successfully!', newMessage });
   } catch (error) {
+    // Handle errors
     res.status(500).json({ error: 'Error posting message', details: error.message });
   }
 };
-
 const getAllMessages = async (req, res) => {
   try {
     const messages = await Message.find({});
@@ -177,8 +191,78 @@ const googleRegister = async (req, res) => {
     console.error("Google registration error:", error.message);
     res.status(500).json({ error: "Internal Server Error", details: error.message });
   }
+  
+};
+const searchUsers = async (req, res) => {
+  const { query } = req.query;
+
+  try {
+    const users = await User.find({
+      $or: [
+        { name: { $regex: query, $options: "i" } }, // Case-insensitive search by name
+        { email: { $regex: query, $options: "i" } }, // Case-insensitive search by email
+      ],
+    });
+
+    res.status(200).json({ users });
+  } catch (error) {
+    res.status(500).json({ error: 'Error searching users', details: error.message });
+  }
 };
 
+const addFriend = async (req, res) => {
+  const { userId, friendId } = req.body;
+  console.log(userId);
+  console.log(friendId);
+  try {
+    const userToAdd = await User.findById(friendId);
+
+    if (!userToAdd) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    const currentUser = await User.findById(userId);
+
+    // Check if the current user already has the user as a friend
+    if (currentUser.friends.includes(friendId)) {
+      return res.status(400).json({ msg: 'User is already your friend' });
+    }
+
+    // Add userId to the current user's friends array
+    try{
+    currentUser.friends.push(friendId);
+  }
+    catch(error){
+      console.log("error pushing");
+    }
+
+    // Save the updated user document
+    await currentUser.save();
+
+    res.status(200).json({ msg: `Added user ${friendId} as a friend` });
+  } catch (error) {
+    console.error('Error adding friend', error);
+    res.status(500).json({ error: 'Error adding friend', details: error.message });
+  }
+};
+const fetchFriends = async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const user = await User.findById(userId).populate('friends', 'name email');
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json({ friends: user.friends });
+  } catch (error) {
+    console.error('Error fetching friends:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+module.exports = {
+  fetchFriends,
+};
 module.exports = {
   login,
   register,
@@ -190,4 +274,7 @@ module.exports = {
   getAllMessages,
   updateMessage,
   deleteMessage,
+  searchUsers,
+  addFriend,
+  fetchFriends
 };

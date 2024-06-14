@@ -3,6 +3,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Dashboard, HomeLayout, Landing, Login, Logout, Register } from "./pages";
 import Profile from "./components/Profile";
 import Post from "./components/Post";
+import Friends from "./components/Friends";
 import { ToastContainer, toast } from 'react-toastify';
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
           {
             path: "post",
             element: <Post />,
+            },
+          {
+            path: "friends",
+            element: <Friends />,
             },
           
             {

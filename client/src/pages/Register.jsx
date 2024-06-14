@@ -19,8 +19,6 @@ const Register = () => {
     try {
       // Extract the credential from the response
       let token = credentialResponse.credential;
-      console.log("token:"+token+" :token");
-      console.log("auth:"+import.meta.env.VITE_REACT_APP_googleauth+":auth");
       
       // Send the token to your backend for registration
       const response = await axios.post("http://localhost:3000/api/v1/gregister", {token} );

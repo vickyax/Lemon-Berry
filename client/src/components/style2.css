@@ -1,0 +1,20 @@
+h1{
+    color: lightblue;
+}
+h3,h2{
+    color: chartreuse;
+}
+p{
+    color: chartreuse;
+    
+}
+.list-group-item{
+    color: rgb(6, 5, 5);
+    border-color:lightgreen;
+    background: 10%;
+    background-color: lightcyan;
+}
+.alert{
+    color: rgb(246, 68, 3);
+
+}

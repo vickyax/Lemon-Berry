@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
+import { useDropzone } from 'react-dropzone';
 import useUserData from './getData';
+import Navbar from "./Navbar";
 
 const ProfileContainer = styled.div`
   padding: 2rem;
@@ -15,7 +17,7 @@ const ProfileContainer = styled.div`
 
 const Title = styled.h1`
   font-size: 2rem;
-  color: #333;
+  color: #8FE6C4;
 `;
 
 const Info = styled.p`
@@ -47,6 +49,11 @@ const PostContainer = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin: 1rem 0;
   padding: 1rem;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.02);
+  }
 `;
 
 const PostTitle = styled.h3`
@@ -56,23 +63,57 @@ const PostTitle = styled.h3`
 
 const PostContent = styled.p`
   font-size: 1rem;
-  color: #555;
+  color: blue;
 `;
 
 const EditForm = styled(Form)`
   margin-top: 1rem;
 `;
 
+const FileUploadContainer = styled.div`
+  margin-top: 1rem;
+`;
+
+const FileUploadLabel = styled.p`
+  font-size: 1rem;
+  color: #777;
+  margin-bottom: 0.5rem;
+`;
+
+const FileUploadButton = styled(Button)`
+  background-color: #007bff;
+  border-color: #007bff;
+
+  &:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+`;
+
+const ResponseMessage = styled.p`
+  font-size: 1rem;
+  color: #555;
+  margin-top: 0.5rem;
+`;
+
 const Post = () => {
-  const [token, setToken] = useState(JSON.parse(localStorage.getItem("auth")) || "");
+  const [token, setToken] = useState(JSON.parse(localStorage.getItem('auth')) || '');
   const { user, loading } = useUserData(token);
-  const [message, setMessage] = useState("");
-  const [response, setResponse] = useState("");
+  const [message, setMessage] = useState('');
+  const [image, setImage] = useState(null);
+  const [response, setResponse] = useState('');
   const [posts, setPosts] = useState([]);
   const [postLoading, setPostLoading] = useState(true);
   const [editPostId, setEditPostId] = useState(null);
-  const [editMessage, setEditMessage] = useState("");
+  const [editMessage, setEditMessage] = useState('');
   const navigate = useNavigate();
+
+  const onDrop = (acceptedFiles) => {
+    setImage(acceptedFiles[0]);
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: 'image/*' });
+
   useEffect(() => {
     if (!token) {
       navigate('/login'); // Redirect to login if no token
@@ -81,19 +122,17 @@ const Post = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      if (token) {
-        try {
-          const response = await axios.get('http://localhost:3000/api/v1/messages', {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
-          setPosts(response.data.messages);
-        } catch (error) {
-          console.error("Error fetching posts", error);
-        } finally {
-          setPostLoading(false);
-        }
+      try {
+        const response = await axios.get('http://localhost:3000/api/v1/messages', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setPosts(response.data.messages);
+      } catch (error) {
+        console.error('Error fetching posts', error);
+      } finally {
+        setPostLoading(false);
       }
     };
     fetchPosts();
@@ -103,35 +142,38 @@ const Post = () => {
     e.preventDefault();
 
     if (!token) {
-      setResponse("Please login to post a message.");
+      setResponse('Please login to post a message.');
       return;
     }
 
+    const formData = new FormData();
+    formData.append('id', user.id);
+    formData.append('username', user.name);
+    formData.append('message', message);
+    if (image) {
+      formData.append('image', image);
+    }
+
     try {
-      const id = user.id;
-      const username = user.name;
-      const result = await axios.post('http://localhost:3000/api/v1/messages', {
-        id,
-        username,
-        message
-      }, {
+      const result = await axios.post('http://localhost:3000/api/v1/messages', formData, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
       });
       setResponse(result.data.msg);
-      setMessage(""); // Clear the input field after successful post
+      setMessage('');
+      setImage(null);
 
-      // Fetch the updated list of posts
       const updatedPosts = await axios.get('http://localhost:3000/api/v1/messages', {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
       setPosts(updatedPosts.data.messages);
     } catch (error) {
-      setResponse("Error posting message. Please try again.");
-      console.error("Error posting message", error);
+      setResponse('Error posting message. Please try again.');
+      console.error('Error posting message', error);
     }
   };
 
@@ -139,13 +181,12 @@ const Post = () => {
     try {
       await axios.delete(`http://localhost:3000/api/v1/messages/${postId}`, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
-      // Update the posts list after deletion
-      setPosts(posts.filter(post => post._id !== postId));
+      setPosts(posts.filter((post) => post._id !== postId));
     } catch (error) {
-      console.error("Error deleting post", error);
+      console.error('Error deleting post', error);
     }
   };
 
@@ -158,100 +199,116 @@ const Post = () => {
     e.preventDefault();
 
     try {
-      const result = await axios.put(`http://localhost:3000/api/v1/messages/${editPostId}`, {
-        message: editMessage
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      const result = await axios.put(
+        `http://localhost:3000/api/v1/messages/${editPostId}`,
+        { message: editMessage },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
+      );
       setResponse(result.data.msg);
       setEditPostId(null);
-      setEditMessage("");
+      setEditMessage('');
 
-      // Fetch the updated list of posts
       const updatedPosts = await axios.get('http://localhost:3000/api/v1/messages', {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
       setPosts(updatedPosts.data.messages);
     } catch (error) {
-      setResponse("Error editing message. Please try again.");
-      console.error("Error editing message", error);
+      setResponse('Error editing message. Please try again.');
+      console.error('Error editing message', error);
     }
   };
 
   if (loading) {
-    return <Loading>Loading...</Loading>; // Show loading indicator while fetching user data
+    return <Loading>Loading...</Loading>;
   }
 
   if (!user) {
-    return <NoUserData>No user data</NoUserData>; // Show message if no user data found
+    return <NoUserData>No user data</NoUserData>;
   }
 
   return (
-    <Container>
-      <Row>
-        <Col>
-          <h2>All Posts</h2>
-          {postLoading ? (
-            <Loading>Loading posts...</Loading>
-          ) : posts.length === 0 ? (
-            <NoUserData>No posts found</NoUserData>
-          ) : (
-            posts.map(post => (
-              <PostContainer key={post._id}>
-                <PostTitle>{post.username}</PostTitle>
-                <PostContent>{post.message}</PostContent>
-                {post.username === user.name && (
-                  <>
-                    <Button variant="warning" onClick={() => handleEdit(post)}>Edit</Button>
-                    <Button variant="danger" onClick={() => handleDelete(post._id)}>Delete</Button>
-                  </>
-                )}
-                {editPostId === post._id && (
-                  <EditForm onSubmit={handleEditSubmit}>
-                    <Form.Group controlId="formEditMessage">
-                      <Form.Label>Edit Message</Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="Edit your message"
-                        value={editMessage}
-                        onChange={(e) => setEditMessage(e.target.value)}
-                      />
-                    </Form.Group>
-                    <Button variant="primary" type="submit">
-                      Save
-                    </Button>
-                  </EditForm>
-                )}
-              </PostContainer>
-            ))
-          )}
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <h1>Post a Message</h1>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formMessage">
-              <Form.Label>Message</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter your message"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-              />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Post
-            </Button>
-          </Form>
-          {response && <p>{response}</p>}
-        </Col>
-      </Row>
-    </Container>
+    <>
+      <Navbar />
+      <Container>
+        <Row>
+          <Col>
+            <Title>All Posts</Title>
+            {postLoading ? (
+              <Loading>Loading posts...</Loading>
+            ) : posts.length === 0 ? (
+              <NoUserData>No posts found</NoUserData>
+            ) : (
+              posts.map((post) => (
+                <PostContainer key={post._id}>
+                  <PostTitle>{post.username}</PostTitle>
+                  <PostContent>{post.message}</PostContent>
+                  {post.image && <img src={`http://localhost:3000/${post.image}`} alt="Post" style={{ maxWidth: '100%' }} />}
+                  {post.username === user.name && (
+                    <>
+                      <Button variant="warning" onClick={() => handleEdit(post)}>
+                        Edit
+                      </Button>
+                      <Button variant="danger" onClick={() => handleDelete(post._id)}>
+                        Delete
+                      </Button>
+                    </>
+                  )}
+                  {editPostId === post._id && (
+                    <EditForm onSubmit={handleEditSubmit}>
+                      <Form.Group controlId="formEditMessage">
+                        <Form.Label>Edit Message</Form.Label>
+                        <Form.Control
+                          type="text"
+                          placeholder="Edit your message"
+                          value={editMessage}
+                          onChange={(e) => setEditMessage(e.target.value)}
+                        />
+                      </Form.Group>
+                      <Button variant="primary" type="submit">
+                        Save
+                      </Button>
+                    </EditForm>
+                  )}
+                </PostContainer>
+              ))
+            )}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Title>Post a Message</Title>
+            <Form onSubmit={handleSubmit}>
+              <Form.Group controlId="formMessage">
+                <Form.Label>Message</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter your message"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                />
+              </Form.Group>
+              <FileUploadContainer>
+                <FileUploadLabel>Upload Image</FileUploadLabel>
+                <div {...getRootProps()}>
+                  <input {...getInputProps()} />
+                  <FileUploadButton variant="secondary">Choose File</FileUploadButton>
+                </div>
+              </FileUploadContainer>
+              <Button variant="primary" type="submit">
+                Post
+              </Button>
+            </Form>
+            <ResponseMessage>{response}</ResponseMessage>
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 };
 
