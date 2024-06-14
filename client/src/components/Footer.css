@@ -1,0 +1,11 @@
+.footer {
+    align-items: center;
+    justify-content: space-between;
+    display: auto;
+    margin-top: 100%;
+}
+.social{
+    align-items: center;
+    justify-content: space-between;
+    display: contents;
+}
