@@ -45,9 +45,7 @@ function Friends() {
 
   const handleAddFriend = async (friendId, friendName) => {
     try {
-      console.log('Token:', token);
       const data={userId: user.id,friendId};
-      console.log(data);
       const response = await axios.post(`http://localhost:3000/api/v1/users/friends/add`, data, {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -212,8 +212,6 @@ const searchUsers = async (req, res) => {
 
 const addFriend = async (req, res) => {
   const { userId, friendId } = req.body;
-  console.log(userId);
-  console.log(friendId);
   try {
     const userToAdd = await User.findById(friendId);
 
