@@ -1,0 +1,12 @@
+img{
+    width: 400px;
+}
+.loginleft{
+    flex-grow: 1;
+    height: 100vh;
+    background-color: #E9E9E9;
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
