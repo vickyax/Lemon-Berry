@@ -1,3 +1,4 @@
+/* style.css */
 html {
   --section-background-color: linear-gradient(
     to bottom left,
@@ -10,11 +11,12 @@ html {
     rgba(17, 16, 16, 0.678),
     rgba(12, 10, 22, 0.863)
   );
-
+  
   --imp-text-color: #c770f0;
 }
 
 .purple {
+  
   color: var(--imp-text-color) !important;
 }
 
@@ -39,14 +41,27 @@ button:focus {
 }
 
 #preloader-none {
+  background-repeat: no-repeat;
+  background-position: center;
+  position: fixed;
+  display: flex;
+  top: 0;
+  left: 0;
+  width: 100%;
   opacity: 0;
 }
 
 #no-scroll {
   overflow: hidden;
   height: 100vh;
+  background-color: #fff;
 }
+#scroll{
 
+  overflow: hidden;
+  height: 100vh;
+
+}
 /* --------- */
 /*Scrollbar   */
 /* --------- */
@@ -84,7 +99,7 @@ button:focus {
 
 .navbar {
   flex: auto;
-  display: contents;
+  display: inline-block;
   transition: all 0.3s ease-out 0s !important;
   padding: 0.3rem 2rem !important;
   font-size: 1.2rem !important;
@@ -143,8 +158,8 @@ button:focus {
                 
                 @media (max-width: 767px) {
                   .navbar {
-                    padding: 1rem 2rem !important;
-                    font-size: 1.4rem !important;
+                    padding: 10px !important;
+                    font-size: 10px !important;
                     background-color: #181a27 !important;
                     }
                     .navbar-nav .nav-item a::after {
@@ -162,8 +177,8 @@ button:focus {
                           
                           .navbar-nav .nav-link {
                             color: white !important;
-                            padding-right: 1rem !important;
-                            padding-left: 1rem !important;
+                            padding-right: 0.5rem !important;
+                            padding-left: 0.5rem !important;
                             }
                             
                             .nav-link {
@@ -172,10 +187,19 @@ button:focus {
                               
                               @media (max-width: 767px) {
                                 .nav-link {
-                                  padding: 0.7rem 1rem !important;
+                                  padding: 0.5rem 1rem !important;
                                   }
                                   }
-                          
+                              @media (max-width: 400px) {
+                                .nav-link {
+                                  padding: 0.5rem 1rem !important;
+                                  }
+                                  .navbar-nav .nav-link {
+                                    color: white !important;
+                                    padding-right: 0.1rem !important;
+                                    padding-left: 0.1rem !important;
+                                    }
+                                  }
                                     
                                     .navbar-nav {
                                       display: flex;

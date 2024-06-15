@@ -1,13 +1,18 @@
+/* //Dashboard.css */
 .dashboard-main{
     font-size: 30px;
     height: 100vh;
     width: 100%;
-    display: contents;
+     background-repeat: no-repeat;
+    overflow-x: hidden;
+
     }
     
     .dashboard-main p{
-  display: contents;
+
   font-size: 20px;
+  background-repeat: no-repeat;
+  overflow: hidden;
   padding: 0 20px
 }
 
@@ -40,7 +45,7 @@
       .Dashboard {
         display: contents;
         text-align: center;
-        
+        background-repeat: no-repeat;
         
         }
         
@@ -49,7 +54,13 @@
     height: 40vmin;
     pointer-events: none;
     }
-    
+    @media (max-width: 768px) {
+      /* Example adjustments for mobile screens */
+      .dashboard-main {
+        font-size: 24px;
+        background-repeat: no-repeat;
+      }
+    }
     .Dashboard-header {
       display: contents;
       background-color: #282c34;
@@ -60,16 +71,20 @@
       justify-content: center;
       font-size: calc(10px + 2vmin);
       color: white;
+      overflow-x: hidden;
       }
       
       .Dashboard-link {
     display: contents;
     color: #61dafb;
   }
-  .dash{
+  .dash {
     width: 100%;
-  justify-content: center;
-  align-items: center;
-  max-width: 100%;
-  padding: 10%;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    padding: 5%; /* Adjusted padding for responsiveness */
+    overflow-x: hidden;
+    background-repeat: no-repeat;
   }
+  

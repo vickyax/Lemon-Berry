@@ -6,11 +6,26 @@
   .register-left {
     display: none;
   }
+  .dashboard-main {
+    font-size: 20px !important;
+    background-color: aqua;
+    background-repeat: no-repeat;
+    overflow-x: hidden;
+  }
+  .dashboard-main p{
+    background-color: aqua;
+    background-repeat: no-repeat;
+    font-size: 15px;
+    overflow-x: hidden;
+  }
 }
 
 @media (max-width: 600px) {
   .dashboard-main {
+    background-color: aqua;
     font-size: 20px !important;
+    background-repeat: no-repeat;
+    overflow-x: hidden;
   }
 
   .landing-main {
@@ -30,13 +45,18 @@
   }
 
   .dashboard-main p{
+    background-color: aqua;
+    background-repeat: no-repeat;
     font-size: 15px;
   }
 }
 
 @media (max-width: 400px) {
   .dashboard-main {
+    background-color: aqua;
+    background-repeat: no-repeat;
     font-size: 15px !important;
+    overflow-x: hidden;
   }
 
   .landing-main {
@@ -59,6 +79,18 @@
 }
 
 @media (max-width: 370px) {
+  .dashboard-main {
+    background-color: aqua;
+    font-size: 20px !important;
+    background-repeat: no-repeat;
+    overflow-x: hidden;
+  }
+  .dashboard-main p{
+    background-color: aqua;
+    background-repeat: no-repeat;
+    font-size: 15px;
+    overflow-x: hidden;
+  }
   .login-center-options {
     flex-direction: column;
     align-items: center;

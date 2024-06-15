@@ -1,8 +1,11 @@
+/* index.css */
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap");
 body {
   margin: 0;
   font-family: "Raleway", serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: linear-gradient(to left, rgb(241, 234, 255), rgb(20 15 35));
+  background-image: linear-gradient(to left, rgb(255, 255, 255), rgb(73, 55, 116));
+  overflow-x: hidden;
+  /* background-repeat: no-repeat; */
 }

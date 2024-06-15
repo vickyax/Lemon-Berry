@@ -1,4 +1,6 @@
+// Dashboard.jsx
 import React, { useState, useEffect } from "react";
+import "../responsive.css";
 import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Preloader from "../components/Pre";
@@ -22,6 +24,12 @@ import c from "../assets2/img3.jpg";
 import d from "../assets2/img4.jpg";
 import ee from "../assets2/img5.jpg";
 import f from "../assets2/img6.webp";
+import birdsImage from "../assets/birds.jpg";
+import dragImage from "../assets/drag.jpg";
+import shinchan1Image from "../assets/shinchan1.jpg";
+import shinchan2Image from "../assets/shinchan2.jpg";
+import doraemonImage from "../assets/doraemon.jpg";
+import doraemonImage2 from "../assets/doraemonweb.jpg";
 import backgroundMusic from "../assets/background.mp3";
 const Dashboard = () => {
   const [audioLoaded, setAudioLoaded] = useState(false); // Track if audio has been loaded
@@ -45,7 +53,13 @@ const Dashboard = () => {
 
   const ImageSlideshow = () => {
     const images = [
-      a,b,c,d,ee,f
+      a,b,c,d,ee,f,
+      dragImage,
+    birdsImage,
+    shinchan1Image,
+    shinchan2Image,
+    doraemonImage,
+    doraemonImage2,
     ];
   
     const zoomOutProperties = {
@@ -62,7 +76,7 @@ const Dashboard = () => {
       <div className="slide-container">
         <Zoom {...zoomOutProperties}>
           {images.map((each, index) => (
-            <img key={index} style={{ width: "100%" }} src={each} alt={`Slide ${index}`} />
+            <img key={index} style={{ width: "100%" ,height:"auto"}} src={each} alt={`Slide ${index}`} />
           ))}
         </Zoom>
       </div>
