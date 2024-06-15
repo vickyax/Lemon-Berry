@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import ip from "./server.json";
 const useUserData = (token) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -8,7 +8,7 @@ const useUserData = (token) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('https://lemonserver.onrender.com/api/v1/userInfo', {
+        const response = await axios.get(`${ip.ip}/api/v1/userInfo`, {
           headers: {
             Authorization: `Bearer ${token}`, // Pass the token in the request headers
           },
